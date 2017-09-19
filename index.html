@@ -73,9 +73,18 @@
   <p>Your browser fingerprint: <strong id="fp"></strong></p>
   <p><code id="time"/></p>
   <p><span id="details"/></p>
-  <button type="button" id="btn">Get my fingerprint</button>
+  <form id="form">
+    <input id="deviceID" placeholder="Device ID" type="text">
+    <button type="button" id="btn">Get my fingerprint</button>
+  </form>
+
+
+
 
   <a href="https://github.com/Valve/fingerprintjs2"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+  <a id="downloadAnchorElem" style="display:none"></a>
+  <a id="htmldl" style="display:none"></a>
 
   <script src="fingerprint2.js"></script>
   <script>
@@ -100,7 +109,31 @@
         $("#details").html(details);
         $("#fp").text(result);
         $("#time").text(timeString);
+
+
+          // download json
+
+          var deviceID = document.getElementById("deviceID").value;
+          var fingerprint = [{device: deviceID}, {fingerprint: result}, {details: components}];
+          var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fingerprint));
+          var dlAnchorElem = document.getElementById('downloadAnchorElem');
+          dlAnchorElem.setAttribute("href",     dataStr     );
+          dlAnchorElem.setAttribute("download", "fp.json");
+          dlAnchorElem.click();
+
+          // download html
+
+          var html = "data:text/json;charset=utf-8," + encodeURIComponent("<h1>device: " + deviceID + "</h1>" + "<h2>fingerprint: " + result + "</h2>" + details  );
+
+          var htmldl = document.getElementById('htmldl');
+          htmldl.setAttribute("href",     html     );
+          htmldl.setAttribute("download", deviceID + ".html");
+          htmldl.click();
+
       });
+
+
+
     });
   </script>
 </body>
