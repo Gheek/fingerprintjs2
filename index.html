@@ -85,6 +85,7 @@
 
   <a id="downloadAnchorElem" style="display:none"></a>
   <a id="htmldl" style="display:none"></a>
+  <a id="csvdl" style="display:none"></a>
 
   <script src="fingerprint2.js"></script>
   <script>
@@ -111,6 +112,30 @@
         $("#time").text(timeString);
 
 
+        var csv;
+
+          for (var index in components) {
+              var obj = components[index];
+              //var value = obj.value;
+              //var line = obj.key + " = " + value.toString().substr(0, 100);
+              csv += obj.key.toString() + ","
+          }
+
+          csv += "\r\n";
+
+          for (var index in components) {
+              var obj = components[index];
+              substring= obj.value.toString().substr(0,100);
+              substring= substring.replace(/,/g , "");
+              substring= substring.replace(/ /g , "");
+              csv += substring + ",";
+          }
+
+          console.log(csv);
+
+
+
+
           // download json
 
           var deviceID = document.getElementById("deviceID").value;
@@ -118,8 +143,16 @@
           var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fingerprint));
           var dlAnchorElem = document.getElementById('downloadAnchorElem');
           dlAnchorElem.setAttribute("href",     dataStr     );
-          dlAnchorElem.setAttribute("download", "fp.json");
+          dlAnchorElem.setAttribute("download", deviceID + ".json");
           dlAnchorElem.click();
+
+          //download csv
+
+          var csvstring = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+          var csvdl = document.getElementById('csvdl');
+          csvdl.setAttribute("href",     csvstring     );
+          csvdl.setAttribute("download", deviceID + ".csv");
+          csvdl.click();
 
           // download html
 
